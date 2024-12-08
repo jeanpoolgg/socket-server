@@ -15,7 +15,12 @@ export default class Server {
         this.port = SERVER_PORT;
 
         this.httpServer = new http.Server(this.app);
-        this.io = new socketIO.Server(this.httpServer);
+        this.io = new socketIO.Server(this.httpServer, {
+            cors: {
+                origin: "http://localhost:4200", // Cambia al puerto de tu frontend Angular si es distinto
+                methods: ["GET", "POST"]
+            }
+        });
 
         this.escucharSockets();
     }
@@ -33,6 +38,6 @@ export default class Server {
     }
 
     start(callback: () => void) {
-        this.app.listen(this.port, callback);
+        this.httpServer.listen(this.port, callback);
     }    
 }
