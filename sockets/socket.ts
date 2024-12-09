@@ -10,6 +10,7 @@ export const usuariosConectados = new UsuariosLista();
 export const conectarCliente = (cliente: Socket) => {
     const usuario = new Usuario(cliente.id);
     usuariosConectados.agregar(usuario);
+
 };
 
 
@@ -44,3 +45,10 @@ export const configurarUsuario = (cliente: Socket, io: socketIO.Server) => {
         });
     })
 };
+
+// Obtener usuarios
+export const obtenerUsuarios = (cliente: Socket, io: socketIO.Server) => {
+    cliente.on('obtener-usuarios', () => {
+        io.to(cliente.id).emit('usuarios-activos', usuariosConectados.getLista());
+    })
+}
