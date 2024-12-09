@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import Server from '../classes/server';
+import { usuariosConectados } from "../sockets/socket";
 
 
 const router = Router();
@@ -72,5 +73,26 @@ router.get('/usuarios', (req: Request, res: Response) => {
         });
     }
 });
+
+
+// Obtener usuarios y sus nombres
+router.get('/usuarios/detalle', (req: Request, res: Response) => {
+    const server = Server.instance;
+
+    try {
+        res.json({
+            ok: true,
+            clientes: usuariosConectados.getLista()
+        });
+    } catch (error: Error | any) {
+        res.status(500).json({
+            ok: false,
+            err: 'Error al obtener la lista de usuarios',
+            detalle: error.message // Opcional, para obtener más información sobre el error
+        });
+    }
+});
+
+
 
 export default router;
