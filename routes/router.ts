@@ -53,4 +53,24 @@ router.post('/mensajes/:id', (req: Request, res:Response) => {
 });
 
 
+// Servicio para obtener todos los IDs de los usuarios
+router.get('/usuarios', (req: Request, res: Response) => {
+    const server = Server.instance;
+
+    try {
+        // Obtén la lista de clientes conectados
+        const clientes = Array.from(server.io.sockets.sockets.keys());
+        res.json({
+            ok: true,
+            clientes
+        });
+    } catch (error: Error | any) {
+        res.status(500).json({
+            ok: false,
+            err: 'Error al obtener la lista de usuarios',
+            detalle: error.message // Opcional, para obtener más información sobre el error
+        });
+    }
+});
+
 export default router;
